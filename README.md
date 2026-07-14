@@ -1,5 +1,7 @@
 # 🚀 AI Task Processing Platform
 
+![Dashboard Preview](./assets/dashboard_preview.png)
+
 ```mermaid
 graph TD
     A[Frontend Next.js] -->|REST API| B(Backend Express)
