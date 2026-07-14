@@ -5,7 +5,36 @@ on:
     branches: [ "main" ]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Lint Frontend
+        run: |
+          cd frontend
+          npm install
+          npm run lint
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Lint Worker
+        run: |
+          cd worker
+          pip install flake8
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
   build-and-push:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -22,18 +51,34 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ai-task-backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/ai-task-backend:${{ github.sha }},${{ secrets.DOCKER_USERNAME }}/ai-task-backend:latest
           
       - name: Build and Push Worker
         uses: docker/build-push-action@v4
         with:
           context: ./worker
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ai-task-worker:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/ai-task-worker:${{ github.sha }},${{ secrets.DOCKER_USERNAME }}/ai-task-worker:latest
           
       - name: Build and Push Frontend
         uses: docker/build-push-action@v4
         with:
           context: ./frontend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ai-task-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/ai-task-frontend:${{ github.sha }},${{ secrets.DOCKER_USERNAME }}/ai-task-frontend:latest
+
+      - name: Update Infrastructure Repository
+        env:
+          INFRA_PAT: ${{ secrets.INFRA_PAT }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+        run: |
+          git clone https://x-access-token:${INFRA_PAT}@github.com/${GITHUB_OWNER}/ai-task-infra.git
+          cd ai-task-infra
+          find . -type f -name "*.yaml" -exec sed -i "s|image: .*ai-task-backend:.*|image: ${{ secrets.DOCKER_USERNAME }}/ai-task-backend:${{ github.sha }}|g" {} +
+          find . -type f -name "*.yaml" -exec sed -i "s|image: .*ai-task-worker:.*|image: ${{ secrets.DOCKER_USERNAME }}/ai-task-worker:${{ github.sha }}|g" {} +
+          find . -type f -name "*.yaml" -exec sed -i "s|image: .*ai-task-frontend:.*|image: ${{ secrets.DOCKER_USERNAME }}/ai-task-frontend:${{ github.sha }}|g" {} +
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image tags to ${{ github.sha }}" || echo "No changes to commit"
+          git push origin main || echo "No push needed"
