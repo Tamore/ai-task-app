@@ -1,6 +1,7 @@
 import os
 import json
 import redis
+import time
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -19,14 +20,28 @@ def get_mongo_collection():
     return db['tasks']
 
 def process_operation(input_text, operation_type):
-    if operation_type == 'Uppercase':
-        return input_text.upper()
-    elif operation_type == 'Lowercase':
-        return input_text.lower()
-    elif operation_type == 'Reverse String':
-        return input_text[::-1]
-    elif operation_type == 'Word Count':
-        return str(len(input_text.split()))
+    time.sleep(3) # Simulate heavy AI processing time
+    if operation_type == 'Summarize Text':
+        words = input_text.split()
+        return " ".join(words[:15]) + ("..." if len(words) > 15 else "")
+    elif operation_type == 'Sentiment Analysis':
+        lower = input_text.lower()
+        good_words = ['good', 'great', 'awesome', 'excellent', 'happy', 'love', 'best']
+        bad_words = ['bad', 'terrible', 'awful', 'sad', 'hate', 'worst']
+        if any(w in lower for w in good_words):
+            return "Positive (0.92 confidence)"
+        elif any(w in lower for w in bad_words):
+            return "Negative (0.87 confidence)"
+        return "Neutral (0.55 confidence)"
+    elif operation_type == 'Extract Keywords':
+        words = [w.strip('.,!?()') for w in input_text.split() if len(w) > 5]
+        unique_words = list(set(words))
+        return ", ".join(unique_words[:5]) if unique_words else "No significant keywords found"
+    elif operation_type == 'Entity Recognition':
+        words = input_text.split()
+        entities = [w.strip('.,!?()') for w in words if w.strip('.,!?()') and w[0].isupper() and len(w) > 1]
+        unique_entities = list(set(entities))
+        return "Found Entities: " + ", ".join(unique_entities) if unique_entities else "No entities detected"
     else:
         raise ValueError(f"Unknown operation type: {operation_type}")
 
