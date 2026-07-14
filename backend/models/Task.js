@@ -17,7 +17,7 @@ const TaskSchema = new mongoose.Schema({
   operationType: {
     type: String,
     required: true,
-    enum: ['Uppercase', 'Lowercase', 'Reverse String', 'Word Count']
+    enum: ['Summarize Text', 'Sentiment Analysis', 'Extract Keywords', 'Entity Recognition']
   },
   status: {
     type: String,
