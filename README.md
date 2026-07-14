@@ -1,6 +1,5 @@
 # 🚀 AI Task Processing Platform
 
-![Dashboard Preview](./assets/dashboard_preview.png)
 
 ```mermaid
 graph TD
