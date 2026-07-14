@@ -4,7 +4,7 @@
 
 ## 1. Overall System Architecture
 
-The AI Task Processing Platform is engineered as a robust, decoupled microservices architecture designed specifically for high-throughput, asynchronous task processing. By separating the user-facing interface, the API ingestion layer, and the heavy computational workers, the system guarantees that high-latency AI tasks never degrade the responsiveness of the web application.
+The AI Task Processing Platform is engineered as a robust, decoupled microservices architecture designed specifically for high-throughput, asynchronous task processing. By separating the user-facing interface, the API ingestion layer, and the heavy computational workers, the system helps ensure that high-latency AI tasks do not degrade the responsiveness of the web application.
 
 ### 1.1 Architecture Topology
 ```text
@@ -43,7 +43,7 @@ The AI Task Processing Platform is engineered as a robust, decoupled microservic
 
 4. **Background Computation Engine (Python 3.9 Worker)**
    - **Architecture:** A lightweight, multi-threaded containerized worker environment. 
-   - **Task Execution:** Simulates heavy AI workloads (e.g., Natural Language Processing, Image Generation). Once a task is acquired from Redis, the worker processes the payload and directly updates the MongoDB document with the `Completed` or `Failed` status, bypassing the Node.js API to reduce network hops.
+   - **Task Execution:** The current implementation simulates long-running AI inference tasks (such as NLP or image processing) to demonstrate asynchronous job execution and worker orchestration. The worker implementation can later be replaced with actual ML inference services without changing the surrounding architecture. Once a task is acquired from Redis, the worker processes the payload and directly updates the MongoDB document with the `Completed` or `Failed` status, bypassing the Node.js API to reduce network hops.
 
 ---
 
@@ -52,29 +52,27 @@ The AI Task Processing Platform is engineered as a robust, decoupled microservic
 To maintain optimal processing efficiency during unpredictable traffic spikes, the Python Worker service is dynamically orchestrated using Kubernetes (K8s).
 
 ### 2.1 Horizontal Pod Autoscaling (HPA)
-- **Mechanism:** The worker deployment is bound to a Kubernetes `HorizontalPodAutoscaler` (HPA).
-- **Custom Metrics Adapter:** While standard HPA scales based on CPU/Memory, our architecture relies on a Custom Metrics Adapter (like KEDA - Kubernetes Event-driven Autoscaling) that continuously monitors the Redis queue length.
-- **Scaling Triggers:**
-  - *Threshold Exceeded:* If the number of pending tasks in the Redis queue exceeds 10 per active pod, the HPA dynamically provisions new worker pods.
-  - *Cool Down:* Once the queue depth drops back to baseline, Kubernetes gracefully scales the pods back down to the minimum replica count (e.g., 2) to conserve cluster resources and reduce compute costs.
+- **Mechanism:** The worker and backend deployments are bound to Kubernetes `HorizontalPodAutoscaler` (HPA) resources.
+- **Metrics Strategy:** The current GitOps configuration dynamically scales pods based on CPU utilization targets (e.g., 70% average utilization). This ensures that when the workers or API experience high compute loads, Kubernetes automatically provisions additional replicas.
+- **Future Enhancement (Event-Driven Scaling):** To scale workers more proactively before CPU spikes occur, the architecture can be integrated with KEDA (Kubernetes Event-driven Autoscaling) to monitor the exact length of the Redis queue and scale pods precisely based on the backlog of pending tasks.
 
 ### 2.2 Concurrency and Concurrency Limits
 - Because the workers are stateless and utilize `BRPOP`, multiple worker pods can safely listen to the same shared Redis queue without race conditions. Redis guarantees that a single list element is only popped and delivered to one connected client at a time.
 
 ---
 
-## 3. Handling High Task Volume (100,000 Tasks/Day)
+## 3. High Task Throughput Considerations
 
-Processing 100,000 tasks per day equates to an average load of approximately 1.15 tasks per second. However, real-world traffic is bursty. The system is fortified to handle peak hour spikes of 50-100 tasks/second.
+The architecture is designed with horizontal scalability principles and can be extended to support high task throughput by increasing worker replicas and database capacity. The system is built to handle bursty traffic and peak hour spikes effectively.
 
 ### 3.1 Ingestion Buffering & Non-Blocking I/O
-The Node.js backend operates on an event-driven, non-blocking I/O model. It can handle thousands of concurrent ingestion requests. By instantly offloading the heavy lifting to Redis (which can handle >100,000 operations per second), the API never experiences thread-pool exhaustion. The client receives an immediate response, ensuring the UI remains snappy regardless of backend load.
+The Node.js backend operates on an event-driven, non-blocking I/O model. It can handle thousands of concurrent ingestion requests. By instantly offloading the heavy lifting to Redis (which is highly optimized for fast in-memory operations), the API is designed to avoid thread-pool exhaustion. The client receives an immediate response, ensuring the UI remains snappy regardless of backend load.
 
 ### 3.2 Database Connection Pooling
 To prevent MongoDB connection exhaustion during high volume periods, the Node.js backend and Python workers utilize strict Connection Pooling. Connections are reused across requests, preventing the latency and overhead of establishing new TCP handshakes for every task update.
 
 ### 3.3 Dashboard Pagination
-When handling 100,000 tasks a day, a user's dashboard can quickly accumulate massive data. The frontend is designed to strictly paginate task fetches, fetching only 20-50 tasks per page, ensuring the database is not choked by massive `find()` operations returning megabytes of data.
+As task volume increases, a user's dashboard can quickly accumulate massive data. The frontend is designed to strictly paginate task fetches, fetching only 20-50 tasks per page, ensuring the database is not choked by massive `find()` operations returning megabytes of data.
 
 ---
 
@@ -98,20 +96,17 @@ As the `Tasks` and `Users` collections grow into the millions of records, sequen
 
 ## 5. Redis Failure Handling and Recovery Strategy
 
-The Redis message broker is the critical linchpin of the asynchronous architecture. If it fails, tasks could be lost in transit. The following strategies guarantee fault tolerance:
+The Redis message broker is the critical linchpin of the asynchronous architecture. If it fails, tasks could be lost in transit. The following strategies are designed to support fault tolerance:
 
-### 5.1 Persistence (RDB + AOF)
-Redis is configured to persist data to disk using a hybrid approach:
-- **RDB (Redis Database Snapshot):** Takes point-in-time snapshots of the dataset at specified intervals.
-- **AOF (Append Only File):** Logs every write operation. If the Redis pod crashes and is restarted by Kubernetes, it replays the AOF to fully reconstruct the exact state of the unacknowledged queue prior to the crash.
+### 5.1 Redis Broker Stability
+The system utilizes standard Redis container deployments. By default, Redis runs primarily in-memory for maximum throughput. 
 
-### 5.2 The Reliable Queue Pattern (RPOPLPUSH)
-A standard `BRPOP` removes the task from the queue entirely. If the Python worker crashes *while* processing the task, that task is lost forever. 
-To prevent this, we utilize the Reliable Queue pattern (`BRPOPLPUSH` or `BLMOVE`):
-1. The worker atomically pops the task from the `main_queue` and pushes it to a `processing_queue`.
-2. The worker processes the task and updates MongoDB.
-3. Upon success, the worker explicitly deletes the task from the `processing_queue`.
-4. **Recovery:** A secondary "Watchdog" cron job monitors the `processing_queue`. If a task remains there for longer than the maximum timeout (indicating the worker crashed), the Watchdog pushes it back to the `main_queue` for retry.
+**Future Enhancement:** For mission-critical deployments where losing queued tasks during a broker crash is unacceptable, Redis can be configured to use a hybrid persistence approach combining RDB (Database Snapshots) and AOF (Append Only File) to guarantee full recovery of unacknowledged queues.
+
+### 5.2 Queue Processing and Future Enhancements
+The current implementation uses `BRPOP` for lightweight, low-latency task acquisition. While this removes the task from the queue entirely, it provides a streamlined and performant baseline. 
+
+**Future Enhancement:** For strict fault tolerance, the system can be upgraded to implement the Reliable Queue pattern (`BRPOPLPUSH` or `BLMOVE`). This would involve pushing tasks to a `processing_queue` during execution and implementing a watchdog process to recover stalled tasks in the event of a worker crash.
 
 ---
 
