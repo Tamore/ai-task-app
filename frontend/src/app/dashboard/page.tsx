@@ -156,7 +156,7 @@ export default function Dashboard() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {tasks.map((task) => (
-              <div key={task._id} className="bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] rounded-2xl p-7 flex flex-col h-[550px] relative group hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-primary)]/30 transition-all duration-300 shadow-sm animate-in fade-in slide-in-from-bottom-4">
+              <div key={task._id} className="bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] rounded-2xl p-7 flex flex-col relative group hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-primary)]/30 transition-all duration-300 shadow-sm animate-in fade-in slide-in-from-bottom-4">
                 <div className="flex justify-between items-start mb-5 gap-4 shrink-0">
                   <h3 className="font-bold text-xl text-[var(--color-text-main)] pr-4 break-words leading-tight flex-1">{task.title}</h3>
                   <div className="flex-shrink-0 flex items-center gap-2">
@@ -182,23 +182,23 @@ export default function Dashboard() {
                   </span>
                 </div>
                 
-                <div className="space-y-4 text-sm flex-1 overflow-y-auto pr-2">
+                <div className="space-y-4 text-sm flex-1">
                   <div>
                     <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1.5">Input</span>
-                    <p className="text-[var(--color-text-main)] bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] p-3 rounded-xl whitespace-pre-wrap break-words leading-relaxed">{task.inputText}</p>
+                    <p className="text-[var(--color-text-main)] bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] p-3 rounded-xl whitespace-pre-wrap break-words leading-relaxed max-h-24 overflow-y-auto">{task.inputText}</p>
                   </div>
 
                   {task.status === 'Success' && task.result && (
                     <div className="pt-2">
                       <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1.5">Result</span>
-                      <p className="text-emerald-800 font-medium bg-emerald-50 p-3 rounded-xl border border-emerald-100 whitespace-pre-wrap break-words leading-relaxed">{task.result}</p>
+                      <p className="text-emerald-800 font-medium bg-emerald-50 p-3 rounded-xl border border-emerald-100 whitespace-pre-wrap break-words leading-relaxed max-h-32 overflow-y-auto">{task.result}</p>
                     </div>
                   )}
 
                   {task.status === 'Failed' && task.logs && (
                     <div className="pt-2">
                       <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1.5">Error Log</span>
-                      <p className="text-red-800 text-sm bg-red-50 p-3 rounded-xl border border-red-100 whitespace-pre-wrap break-words font-mono">{task.logs}</p>
+                      <p className="text-red-800 text-sm bg-red-50 p-3 rounded-xl border border-red-100 whitespace-pre-wrap break-words font-mono max-h-24 overflow-y-auto">{task.logs}</p>
                     </div>
                   )}
                 </div>
