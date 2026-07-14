@@ -148,20 +148,20 @@ export default function Dashboard() {
                   
                   <div>
                     <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider">Input</span>
-                    <p className="truncate text-[var(--color-text-main)] mt-1 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] p-2 rounded-md">{task.inputText}</p>
+                    <p className="text-[var(--color-text-main)] mt-1 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] p-3 rounded-md whitespace-pre-wrap break-words">{task.inputText}</p>
                   </div>
 
                   {task.status === 'Success' && task.result && (
                     <div className="pt-3 border-t border-[var(--color-border-subtle)] mt-4">
                       <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1">Result</span>
-                      <p className="text-emerald-700 font-medium truncate bg-emerald-50 p-2 rounded-md border border-emerald-200">{task.result}</p>
+                      <p className="text-emerald-700 font-medium bg-emerald-50 p-3 rounded-md border border-emerald-200 whitespace-pre-wrap break-words">{task.result}</p>
                     </div>
                   )}
 
                   {task.status === 'Failed' && task.logs && (
                     <div className="pt-3 border-t border-[var(--color-border-subtle)] mt-4">
                       <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1">Error Log</span>
-                      <p className="text-red-700 text-xs bg-red-50 p-2 rounded-md border border-red-200">{task.logs}</p>
+                      <p className="text-red-700 text-sm bg-red-50 p-3 rounded-md border border-red-200 whitespace-pre-wrap break-words">{task.logs}</p>
                     </div>
                   )}
                 </div>
