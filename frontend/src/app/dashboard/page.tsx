@@ -47,9 +47,11 @@ export default function Dashboard() {
       router.push('/login');
       return;
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTasks();
     const interval = setInterval(fetchTasks, 5000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreateTask = async (e: React.FormEvent) => {
@@ -66,7 +68,7 @@ export default function Dashboard() {
       setNewTaskInput('');
       setNewTaskOperation('Uppercase');
       fetchTasks();
-    } catch (err) {
+    } catch {
       alert('Failed to create task');
     } finally {
       setCreating(false);
@@ -78,7 +80,7 @@ export default function Dashboard() {
     try {
       await api.delete(`/tasks/${taskId}`);
       fetchTasks();
-    } catch (err) {
+    } catch {
       alert('Failed to delete task');
     }
   };
