@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import api from '@/lib/api';
-import { LogOut, Plus, Clock, CheckCircle2, XCircle, Loader2, PlayCircle, Inbox, Activity, Check, X, Calendar } from 'lucide-react';
+import { LogOut, Plus, Clock, CheckCircle2, XCircle, Loader2, PlayCircle, Inbox, Activity, Check, X, Calendar, Trash2 } from 'lucide-react';
 
 type Task = {
   _id: string;
@@ -70,6 +70,16 @@ export default function Dashboard() {
       alert('Failed to create task');
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    if (!confirm('Are you sure you want to delete this task?')) return;
+    try {
+      await api.delete(`/tasks/${taskId}`);
+      fetchTasks();
+    } catch (err) {
+      alert('Failed to delete task');
     }
   };
 
@@ -142,13 +152,21 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {tasks.map((task) => (
               <div key={task._id} className="bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] rounded-2xl p-7 flex flex-col relative group hover:-translate-y-1 hover:shadow-xl hover:border-[var(--color-primary)]/30 transition-all duration-300 shadow-sm animate-in fade-in slide-in-from-bottom-4">
-                <div className="flex justify-between items-start mb-5">
+                <div className="flex justify-between items-start mb-5 gap-4">
                   <h3 className="font-bold text-xl text-[var(--color-text-main)] pr-4 break-words leading-tight flex-1">{task.title}</h3>
-                  <div className="flex-shrink-0 ml-2">
+                  <div className="flex-shrink-0 flex items-center gap-2">
                     {task.status === 'Pending' && <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">{getStatusIcon('Pending')}<span className="ml-1.5">Pending</span></span>}
                     {task.status === 'Running' && <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">{getStatusIcon('Running')}<span className="ml-1.5">Running</span></span>}
                     {task.status === 'Success' && <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">{getStatusIcon('Success')}<span className="ml-1.5">Success</span></span>}
                     {task.status === 'Failed' && <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">{getStatusIcon('Failed')}<span className="ml-1.5">Failed</span></span>}
+                    
+                    <button 
+                      onClick={() => handleDeleteTask(task._id)}
+                      className="p-1.5 text-[var(--color-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors ml-1 active:scale-95"
+                      title="Delete Task"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
                 
