@@ -23,8 +23,8 @@ export default function Login() {
       const res = await api.post('/auth/login', { username, password });
       Cookies.set('token', res.data.token, { expires: 30 });
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed');
+    } catch (err: unknown) {
+      setError((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ export default function Login() {
         </form>
 
         <p className="mt-8 text-center text-[var(--color-text-muted)] text-sm font-medium">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/register" className="text-[var(--color-primary)] hover:text-[#a65421] font-bold transition-colors">
             Create one
           </Link>

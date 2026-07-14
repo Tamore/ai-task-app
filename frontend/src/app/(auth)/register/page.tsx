@@ -23,8 +23,8 @@ export default function Register() {
       const res = await api.post('/auth/register', { username, password });
       Cookies.set('token', res.data.token, { expires: 30 });
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Registration failed');
+    } catch (err: unknown) {
+      setError((err as { response?: { data?: { error?: string } } }).response?.data?.error || 'Registration failed');
     } finally {
       setLoading(false);
     }

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import api from '@/lib/api';
-import { LogOut, Plus, Clock, CheckCircle2, XCircle, Loader2, PlayCircle, Inbox, Activity, Check, X, Calendar, Trash2, Sparkles } from 'lucide-react';
+import { LogOut, Plus, Clock, CheckCircle2, XCircle, Loader2, Inbox, Activity, X, Calendar, Trash2, Sparkles } from 'lucide-react';
 
 type Task = {
   _id: string;
@@ -32,8 +32,8 @@ export default function Dashboard() {
     try {
       const res = await api.get('/tasks');
       setTasks(res.data.data);
-    } catch (err: any) {
-      if (err.response?.status === 401) {
+    } catch (err: unknown) {
+      if ((err as { response?: { status?: number } }).response?.status === 401) {
         Cookies.remove('token');
         router.push('/login');
       }
