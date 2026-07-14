@@ -4,20 +4,15 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-[#0f172a]">
-      {/* Background decorations */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob"></div>
-      <div className="absolute top-[20%] right-[-10%] w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-50 animate-blob animation-delay-4000"></div>
-
-      <div className="z-10 text-center space-y-8 p-8 max-w-3xl glass-card rounded-3xl">
+      <div className="z-10 text-center space-y-8 p-8 max-w-3xl">
         <div className="flex justify-center mb-6">
           <div className="p-4 bg-white/5 rounded-2xl border border-white/10 shadow-2xl">
             <Sparkles className="w-12 h-12 text-cyan-400" />
           </div>
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight">
-          AI Task <span className="text-gradient">Platform</span>
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white">
+          AI Task Platform
         </h1>
         
         <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">

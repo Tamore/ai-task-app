@@ -32,9 +32,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative bg-[#0f172a] p-4">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-50"></div>
-      
-      <div className="w-full max-w-md glass-card rounded-2xl p-8 z-10 relative">
+      <div className="w-full max-w-md bg-slate-800 border border-slate-700 shadow-xl rounded-2xl p-8 z-10 relative">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-500/10 mb-4 border border-purple-500/20">
             <UserPlus className="w-8 h-8 text-purple-400" />

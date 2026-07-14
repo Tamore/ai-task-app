@@ -93,7 +93,7 @@ export default function Dashboard() {
       <nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+            <h1 className="text-xl font-bold text-white">
               AI Task Platform
             </h1>
             <button
@@ -124,13 +124,13 @@ export default function Dashboard() {
             <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
           </div>
         ) : tasks.length === 0 ? (
-          <div className="text-center py-12 glass-card rounded-xl">
+          <div className="text-center py-12 bg-slate-800 border border-slate-700 rounded-xl">
             <p className="text-slate-400">No tasks found. Create one to get started!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tasks.map((task) => (
-              <div key={task._id} className="glass-card rounded-xl p-6 relative overflow-hidden group hover:border-cyan-500/30 transition-all duration-300">
+              <div key={task._id} className="bg-slate-800 border border-slate-700 rounded-xl p-6 relative overflow-hidden group hover:border-cyan-500/50 transition-all duration-300 shadow-sm">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="font-semibold text-lg truncate pr-8">{task.title}</h3>
                   <div className="absolute top-6 right-6">
@@ -174,7 +174,7 @@ export default function Dashboard() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="glass-card w-full max-w-md rounded-2xl p-6 relative animate-in fade-in zoom-in duration-200 border border-slate-700">
+          <div className="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 relative animate-in fade-in zoom-in duration-200 shadow-xl">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white"
