@@ -54,7 +54,6 @@ ai-task-app/
 ├── frontend/           # Next.js application
 ├── backend/            # Express API
 ├── worker/             # Python worker
-├── docs/               # Architecture documents and assets
 ├── .github/workflows/  # CI/CD pipelines
 ├── docker-compose.yml  # Local stack orchestration
 └── README.md
