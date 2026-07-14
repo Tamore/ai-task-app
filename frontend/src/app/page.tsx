@@ -11,7 +11,7 @@ export default function Home() {
           </div>
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight font-serif text-[var(--color-tertiary)]">
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight font-serif text-[var(--color-text-main)]">
           AI Task Platform
         </h1>
         

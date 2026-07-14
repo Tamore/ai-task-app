@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import api from '@/lib/api';
-import { LogOut, Plus, Clock, CheckCircle2, XCircle, Loader2, PlayCircle, Inbox, Activity, Check, X, Calendar, Trash2 } from 'lucide-react';
+import { LogOut, Plus, Clock, CheckCircle2, XCircle, Loader2, PlayCircle, Inbox, Activity, Check, X, Calendar, Trash2, Sparkles } from 'lucide-react';
 
 type Task = {
   _id: string;
@@ -102,10 +102,15 @@ export default function Dashboard() {
     <div className="min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-main)]">
       <nav className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-card)] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-[var(--color-tertiary)] font-serif">
-              AI Task Platform
-            </h1>
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--color-primary)] to-[#a65421] flex items-center justify-center shadow-md">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-[var(--color-text-main)] font-serif tracking-tight">
+                AI Task Platform
+              </h1>
+            </div>
             <button
               onClick={handleLogout}
               className="inline-flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] transition-colors active:scale-95"
