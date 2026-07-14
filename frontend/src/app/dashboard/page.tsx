@@ -23,7 +23,7 @@ export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskInput, setNewTaskInput] = useState('');
-  const [newTaskOperation, setNewTaskOperation] = useState('Summarize Text');
+  const [newTaskOperation, setNewTaskOperation] = useState('Uppercase');
   const [creating, setCreating] = useState(false);
   
   const router = useRouter();
@@ -204,10 +204,10 @@ export default function Dashboard() {
                   onChange={(e) => setNewTaskOperation(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg bg-slate-900/80 border border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-white"
                 >
-                  <option value="Summarize Text">Summarize Text</option>
-                  <option value="Sentiment Analysis">Sentiment Analysis</option>
-                  <option value="Extract Keywords">Extract Keywords</option>
-                  <option value="Entity Recognition">Entity Recognition</option>
+                  <option value="Uppercase">Uppercase</option>
+                  <option value="Lowercase">Lowercase</option>
+                  <option value="Reverse String">Reverse String</option>
+                  <option value="Word Count">Word Count</option>
                 </select>
               </div>
 
