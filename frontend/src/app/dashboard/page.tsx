@@ -89,16 +89,16 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-200">
-      <nav className="border-b border-white/10 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+    <div className="min-h-screen bg-[var(--color-bg-base)] text-[var(--color-text-main)]">
+      <nav className="border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-card)] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-white">
+            <h1 className="text-xl font-bold text-[var(--color-tertiary)] font-serif">
               AI Task Platform
             </h1>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center text-sm font-medium text-slate-300 hover:text-white transition-colors"
+              className="inline-flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-tertiary)] transition-colors"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
@@ -109,10 +109,10 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-semibold">Your Tasks</h2>
+          <h2 className="text-2xl font-semibold font-serif text-[var(--color-primary)]">Your Tasks</h2>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-medium transition-colors shadow-lg shadow-cyan-500/20"
+            className="inline-flex items-center px-4 py-2 bg-[var(--color-primary)] hover:opacity-90 text-white rounded-lg font-medium transition-colors shadow-md"
           >
             <Plus className="w-4 h-4 mr-2" />
             New Task
@@ -124,13 +124,13 @@ export default function Dashboard() {
             <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
           </div>
         ) : tasks.length === 0 ? (
-          <div className="text-center py-12 bg-slate-800 border border-slate-700 rounded-xl">
-            <p className="text-slate-400">No tasks found. Create one to get started!</p>
+          <div className="text-center py-12 bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] rounded-xl">
+            <p className="text-[var(--color-text-muted)]">No tasks found. Create one to get started!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tasks.map((task) => (
-              <div key={task._id} className="bg-slate-800 border border-slate-700 rounded-xl p-6 relative overflow-hidden group hover:border-cyan-500/50 transition-all duration-300 shadow-sm">
+              <div key={task._id} className="bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] rounded-xl p-6 relative overflow-hidden group hover:border-[var(--color-primary)] transition-all duration-300 shadow-sm">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="font-semibold text-lg truncate pr-8">{task.title}</h3>
                   <div className="absolute top-6 right-6">
@@ -140,28 +140,28 @@ export default function Dashboard() {
                 
                 <div className="space-y-3 text-sm">
                   <div>
-                    <span className="text-slate-400 block text-xs">Operation</span>
-                    <span className="font-medium px-2 py-1 bg-white/5 rounded-md inline-block mt-1 border border-white/5">
+                    <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider">Operation</span>
+                    <span className="font-medium px-2 py-1 bg-[var(--color-bg-base)] text-[var(--color-primary)] rounded-md inline-block mt-1 border border-[var(--color-border-subtle)]">
                       {task.operationType}
                     </span>
                   </div>
                   
                   <div>
-                    <span className="text-slate-400 block text-xs">Input</span>
-                    <p className="truncate text-slate-300 mt-1 bg-slate-900/50 p-2 rounded-md">{task.inputText}</p>
+                    <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider">Input</span>
+                    <p className="truncate text-[var(--color-text-main)] mt-1 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] p-2 rounded-md">{task.inputText}</p>
                   </div>
 
                   {task.status === 'Success' && task.result && (
-                    <div className="pt-3 border-t border-white/5 mt-4">
-                      <span className="text-slate-400 block text-xs mb-1">Result</span>
-                      <p className="text-green-400 font-medium truncate bg-green-500/10 p-2 rounded-md border border-green-500/20">{task.result}</p>
+                    <div className="pt-3 border-t border-[var(--color-border-subtle)] mt-4">
+                      <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1">Result</span>
+                      <p className="text-emerald-700 font-medium truncate bg-emerald-50 p-2 rounded-md border border-emerald-200">{task.result}</p>
                     </div>
                   )}
 
                   {task.status === 'Failed' && task.logs && (
-                    <div className="pt-3 border-t border-white/5 mt-4">
-                      <span className="text-slate-400 block text-xs mb-1">Error Log</span>
-                      <p className="text-red-400 text-xs bg-red-500/10 p-2 rounded-md border border-red-500/20">{task.logs}</p>
+                    <div className="pt-3 border-t border-[var(--color-border-subtle)] mt-4">
+                      <span className="text-[var(--color-text-muted)] block text-xs font-bold uppercase tracking-wider mb-1">Error Log</span>
+                      <p className="text-red-700 text-xs bg-red-50 p-2 rounded-md border border-red-200">{task.logs}</p>
                     </div>
                   )}
                 </div>
@@ -173,36 +173,36 @@ export default function Dashboard() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 relative animate-in fade-in zoom-in duration-200 shadow-xl">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
+          <div className="bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] w-full max-w-md rounded-2xl p-6 relative shadow-2xl">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              className="absolute top-4 right-4 text-[var(--color-text-muted)] hover:text-[var(--color-tertiary)] transition-colors"
             >
               <XCircle className="w-5 h-5" />
             </button>
             
-            <h3 className="text-xl font-bold mb-6">Create New Task</h3>
+            <h3 className="text-xl font-bold font-serif text-[var(--color-tertiary)] mb-6">Create New Task</h3>
             
             <form onSubmit={handleCreateTask} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Title</label>
+                <label className="block text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1">Title</label>
                 <input
                   type="text"
                   required
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900/80 border border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none text-[var(--color-text-main)]"
                   placeholder="E.g., Process document 1"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Operation Type</label>
+                <label className="block text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1">Operation Type</label>
                 <select
                   value={newTaskOperation}
                   onChange={(e) => setNewTaskOperation(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900/80 border border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none text-[var(--color-text-main)]"
                 >
                   <option value="Uppercase">Uppercase</option>
                   <option value="Lowercase">Lowercase</option>
@@ -212,12 +212,12 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Input Text</label>
+                <label className="block text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-1">Input Text</label>
                 <textarea
                   required
                   value={newTaskInput}
                   onChange={(e) => setNewTaskInput(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-900/80 border border-slate-700 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none min-h-[100px] text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none min-h-[100px] text-[var(--color-text-main)]"
                   placeholder="Enter text to process..."
                 />
               </div>
@@ -226,14 +226,14 @@ export default function Dashboard() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                  className="px-4 py-2 rounded-lg font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-main)] hover:bg-[var(--color-bg-base)] transition-colors border border-transparent"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center shadow-lg shadow-cyan-500/20"
+                  className="px-4 py-2 bg-[var(--color-primary)] hover:opacity-90 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center shadow-md"
                 >
                   {creating && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                   Create Task
