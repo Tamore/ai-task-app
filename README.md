@@ -1,5 +1,6 @@
 # 🚀 AI Task Processing Platform
 
+![Dashboard Preview](./docs/dashboard_preview.png)
 A production-ready, scalable microservices architecture designed to handle asynchronous AI task processing. Built as a comprehensive full-stack assessment, this project demonstrates modern best practices in containerization, decoupled architectures, and continuous deployment.
 
 ## 🏗️ Architecture Overview
