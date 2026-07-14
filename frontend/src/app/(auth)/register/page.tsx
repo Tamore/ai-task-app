@@ -32,13 +32,13 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative bg-[var(--color-bg-base)] text-[var(--color-text-main)] p-4">
-      <div className="w-full max-w-md bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] shadow-xl rounded-2xl p-8 z-10 relative">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--color-primary)]/10 mb-4 border border-[var(--color-primary)]/20">
-            <UserPlus className="w-8 h-8 text-[var(--color-primary)]" />
+      <div className="w-full max-w-md bg-[var(--color-bg-card)] border border-[var(--color-border-subtle)] shadow-[0_8px_30px_rgba(0,0,0,0.04)] rounded-2xl p-10 z-10 relative animate-in fade-in zoom-in-95 duration-300">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[var(--color-primary)]/10 mb-6 border border-[var(--color-primary)]/20 shadow-sm">
+            <UserPlus className="w-7 h-7 text-[var(--color-primary)]" />
           </div>
-          <h2 className="text-3xl font-bold font-serif text-[var(--color-tertiary)] mb-2">Create Account</h2>
-          <p className="text-[var(--color-text-muted)]">Join the AI Task Platform</p>
+          <h2 className="text-3xl font-extrabold text-[var(--color-text-main)] mb-3 tracking-tight">Create Account</h2>
+          <p className="text-[var(--color-text-muted)] font-medium">Join the AI Task Platform</p>
         </div>
 
         {error && (
@@ -49,11 +49,11 @@ export default function Register() {
 
         <form onSubmit={handleRegister} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-[var(--color-text-main)] mb-2">Username</label>
+            <label className="block text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Username</label>
             <input
               type="text"
               required
-              className="w-full px-4 py-3 rounded-xl bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] placeholder-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] placeholder-[var(--color-text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-all font-medium"
               placeholder="Choose a username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -61,11 +61,11 @@ export default function Register() {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-[var(--color-text-main)] mb-2">Password</label>
+            <label className="block text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Password</label>
             <input
               type="password"
               required
-              className="w-full px-4 py-3 rounded-xl bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] placeholder-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] text-[var(--color-text-main)] placeholder-[var(--color-text-muted)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 focus:border-[var(--color-primary)] transition-all font-medium"
               placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -75,15 +75,15 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 flex items-center justify-center rounded-xl font-semibold text-white bg-[var(--color-primary)] hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 px-4 flex items-center justify-center rounded-xl font-medium text-white bg-[var(--color-primary)] hover:bg-[#a65421] transition-all shadow-[0_4px_14px_0_rgba(194,101,42,0.39)] hover:shadow-[0_6px_20px_rgba(194,101,42,0.23)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed mt-8"
           >
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Sign Up'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-[var(--color-text-muted)] text-sm">
+        <p className="mt-8 text-center text-[var(--color-text-muted)] text-sm font-medium">
           Already have an account?{' '}
-          <Link href="/login" className="text-[var(--color-tertiary)] hover:underline font-bold transition-colors">
+          <Link href="/login" className="text-[var(--color-primary)] hover:text-[#a65421] font-bold transition-colors">
             Sign in
           </Link>
         </p>
