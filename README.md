@@ -23,6 +23,23 @@ The system is designed with a decoupled architecture to ensure high availability
 - **Message Broker (Redis)**: Acts as the high-speed in-memory queue separating the fast frontend API from the slow background worker.
 - **Database (MongoDB)**: The persistent storage layer maintaining User accounts and Task states.
 
+## 🎨 UI Showcase
+
+Here is a glimpse of the premium glassmorphic UI built with Tailwind CSS and Next.js:
+
+### Landing & Authentication
+<p align="center">
+  <img src="./assets/landing.png" width="30%" alt="Landing Page" />
+  <img src="./assets/signin.png" width="30%" alt="Sign In" />
+  <img src="./assets/signup.png" width="30%" alt="Sign Up" />
+</p>
+
+### Task Dashboard & Creation
+<p align="center">
+  <img src="./assets/dashboard.png" width="45%" alt="Dashboard" />
+  <img src="./assets/create_task.png" width="45%" alt="Create Task" />
+</p>
+
 ## ✨ Features
 
 - JWT-based user authentication
